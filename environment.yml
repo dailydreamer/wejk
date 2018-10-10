@@ -2,6 +2,7 @@ name: iFashion
 channels:
   - defaults
 dependencies:
+  - python=3.7
   - appdirs=1.4.3=py37h28b3542_0
   - asn1crypto=0.24.0=py37_0
   - attrs=18.2.0=py37h28b3542_0
@@ -25,10 +26,13 @@ dependencies:
   - flask-sqlalchemy=2.3.2=py37_0
   - fontconfig=2.13.0=h9420a91_0
   - freetype=2.9.1=h8a8886c_1
+  - gevent=1.3.6=py37h7b6447c_0
   - glib=2.56.2=hd408876_0
   - gmp=6.1.2=h6c8ec71_1
+  - greenlet=0.4.15=py37h7b6447c_0
   - gst-plugins-base=1.14.0=hbbd80ab_1
   - gstreamer=1.14.0=hb453b48_1
+  - gunicorn=19.9.0=py37_0
   - html5lib=1.0.1=py37_0
   - hyperlink=18.0.0=py37_0
   - icu=58.2=h9c2bf20_1

@@ -3,12 +3,13 @@ import logging
 from flask import Flask
 from .db import db
 
+
 def create_app():
     app = Flask('__name__')
     app.config.from_mapping(
         SECRET_KEY=os.getenv('SECRET_KEY'),
-        SQLALCHEMY_TRACK_MODIFICATIONS = False,
-        SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}?charset=utf8'.format(os.getenv('MYSQL_URI')),
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        SQLALCHEMY_DATABASE_URI='mysql+pymysql://{}?charset=utf8'.format(os.getenv('MYSQL_URI')),
         LOGGING_LEVEL=logging.INFO
     )
 
