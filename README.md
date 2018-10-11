@@ -53,3 +53,8 @@ docker run -it --rm \
   -e MYSQL_URI \
   dailydreamer/ifashion
 ```
+
+tag release to trigger docker image build
+```sh
+git tag release-va.b.c
+```
