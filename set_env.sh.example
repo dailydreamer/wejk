@@ -1,0 +1,2 @@
+export SECRET_KEY=$(openssl rand -base64 32)
+export MYSQL_URI='user:password@127.0.0.1:3306/database'
