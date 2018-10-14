@@ -10,7 +10,7 @@ API_VERSION = 'v1'
 bp = Blueprint('api', __name__, url_prefix='/api/{}'.format(API_VERSION))
 
 @bp.route('/upload_csv', methods=['POST'])
-def upload_csv():
+def api_upload_csv():
     current_app.logger.info('upload_csv: {} request received from: {}'.format(
         request.method, request.remote_addr))
     if 'csv_file' not in request.files:
@@ -35,7 +35,7 @@ def upload_csv():
     return jsonify(error=None)
 
 @bp.route('/upload_json', methods=['POST'])
-def upload_json():
+def api_upload_json():
     current_app.logger.info('upload_json: {} request received from: {}'.format(
         request.method, request.remote_addr))
     para = request.get_json(silent=True)
@@ -53,7 +53,7 @@ def upload_json():
     return jsonify(error=None)
 
 @bp.route('/predict_month_sku', methods=['POST'])
-def predict_month_sku():
+def api_predict_month_sku():
     para = request.get_json(silent=True)
     required_fileds = {'tenant_id', 'para_list'}
     if not para:
@@ -63,6 +63,6 @@ def predict_month_sku():
     import pandas as pd
     input_df = pd.DataFrame(para['para_list'])
     input_df['tenant_id'] = para['tenant_id']
-    df = predict_month_sku(input_df)
+    df = model.predict_month_sku(input_df)
     # TODO return json
     return 'fake'
