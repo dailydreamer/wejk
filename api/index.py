@@ -20,7 +20,9 @@ def create_app():
 
     @app.route("/")
     def hello():
-        return "iFashion"
+        current_app.logger.info('hello: {} request received from: {}'.format(
+            request.method, request.remote_addr))
+        return "hello wejk"
 
     app.logger.setLevel(app.config['LOGGING_LEVEL'])    
     app.logger.info('sever start')

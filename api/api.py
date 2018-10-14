@@ -11,7 +11,7 @@ bp = Blueprint('api', __name__, url_prefix='/api/{}'.format(API_VERSION))
 
 @bp.route('/upload_csv', methods=['POST'])
 def upload_csv():
-    current_app.logger.info('{} request received from: {}'.format(
+    current_app.logger.info('upload_csv: {} request received from: {}'.format(
         request.method, request.remote_addr))
     if 'csv_file' not in request.files:
         current_app.logger.error('No csv_file field')

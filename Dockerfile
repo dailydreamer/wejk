@@ -10,8 +10,8 @@ COPY . /app
 WORKDIR /app
 
 RUN conda update conda -y && \
-    conda env create -f environment.yml -n iFashion
-ENV PATH /opt/conda/envs/iFashion/bin:$PATH
+    conda env create -f environment.yml -n wejk
+ENV PATH /opt/conda/envs/wejk/bin:$PATH
 
 EXPOSE 8000
 
