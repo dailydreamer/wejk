@@ -1,0 +1,19 @@
+{
+    "tenant_id": 1,
+    "para_list":
+    [{
+        "store_id":1,
+        "predict_year":1,
+        "predict_month":1,
+        "category":1,
+        "color":1,
+        "size":1
+    },{
+        "store_id":1,
+        "predict_year":1,
+        "predict_month":1,
+        "category":1,
+        "color":1,
+        "size":1
+    }]
+}

@@ -20,7 +20,7 @@ def create_app():
 
     @app.route("/")
     def hello():
-        current_app.logger.info('hello: {} request received from: {}'.format(
+        app.logger.info('hello: {} request received from: {}'.format(
             request.method, request.remote_addr))
         return "hello wejk"
 

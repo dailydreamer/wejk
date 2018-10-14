@@ -1,9 +1,9 @@
 import traceback
 from flask import Blueprint, request, jsonify, current_app
 
-from . import utils
-from . import db
-from . import model
+from .utils import read_csv
+from .db import create_record, required_record_mapping
+from .model import predict_month_sku
 
 API_VERSION = 'v1'
 
@@ -24,27 +24,45 @@ def upload_csv():
         current_app.logger.error('Provided file is not csv file')        
         return jsonify(error='Provided file is not csv file'), 400
     try:
-        df = utils.read_csv(csv_file)
-        for index, row in df.iterrows():
+        df = read_csv(csv_file)
+        for _, row in df.iterrows():
             row_dict = row.to_dict()
-            db.create_record(row_dict)
+            create_record(row_dict)
     except ValueError as e:
         current_app.logger.error('Upload csv error: {}\n{}'.format(e, traceback.format_exc()))
         return jsonify(error='Read csv file error: {}'.format(e)), 422
     current_app.logger.info('Upload file {} success'.format(csv_file.filename))
     return jsonify(error=None)
 
+@bp.route('/upload_json', methods=['POST'])
+def upload_json():
+    current_app.logger.info('upload_json: {} request received from: {}'.format(
+        request.method, request.remote_addr))
+    para = request.get_json(silent=True)
+    required_fileds = required_record_mapping.keys()
+    if not para:
+        return jsonify(error='Problems parsing JSON'), 400
+    if not set(required_fileds).issubset(set(para.keys())):
+        return jsonify(error='Not enough parameters'), 422    
+    try:
+        create_record(para)
+    except ValueError as e:
+        current_app.logger.error('Upload json error: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(error='Upload json error: {}'.format(e)), 422
+    current_app.logger.info('Upload json {} success')
+    return jsonify(error=None)
+
 @bp.route('/predict_month_sku', methods=['POST'])
 def predict_month_sku():
-    para = request.get_json()
+    para = request.get_json(silent=True)
     required_fileds = {'tenant_id', 'para_list'}
     if not para:
         return jsonify(error='Problems parsing JSON'), 400
-    if not required_fileds.issubset(set(para.keys())):
+    if not set(required_fileds).issubset(set(para.keys())):
         return jsonify(error='Not enough parameters'), 422
     import pandas as pd
     input_df = pd.DataFrame(para['para_list'])
     input_df['tenant_id'] = para['tenant_id']
-    df = model.predict_month_sku(input_df)
+    df = predict_month_sku(input_df)
     # TODO return json
     return 'fake'
