@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, current_app
 
 from .utils import read_csv
 from .db import create_record, required_record_mapping
-from .model import predict_month_sku
+from .model import predict_monthly_sku, predict_daily_sku
 
 API_VERSION = 'v1'
 
@@ -63,6 +63,21 @@ def api_predict_month_sku():
     import pandas as pd
     input_df = pd.DataFrame(para['para_list'])
     input_df['tenant_id'] = para['tenant_id']
-    df = model.predict_month_sku(input_df)
+    df = predict_monthly_sku(input_df)
+    # TODO return json
+    return 'fake'
+
+@bp.route('/predict_day_sku', methods=['POST'])
+def api_predict_day_sku():
+    para = request.get_json(silent=True)
+    required_fileds = {'tenant_id', 'para_list'}
+    if not para:
+        return jsonify(error='Problems parsing JSON'), 400
+    if not set(required_fileds).issubset(set(para.keys())):
+        return jsonify(error='Not enough parameters'), 422
+    import pandas as pd
+    input_df = pd.DataFrame(para['para_list'])
+    input_df['tenant_id'] = para['tenant_id']
+    df = predict_daily_sku(input_df)
     # TODO return json
     return 'fake'
