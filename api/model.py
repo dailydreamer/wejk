@@ -173,37 +173,26 @@ def featureEng(df_dropped):
     
     return df_dropped
 
-def load_model_daily(tenant_id, date):
+def load_model(tenant_id, date, m_or_d):
     """
     Args:
         tenant_id(string)
         date(datetime)
+        m_or_d(string): m stands for monthly, d for daily
     """
     
-    model = joblib.load('{}-{}-D.joblib'.format(tenant_id, date.date()))
+    model = joblib.load('{}-{}-{}.joblib'.format(tenant_id, date.date(), m_or_d))
     # TODO load from oss
     return model 
 
-def load_model_monthly(tenant_id, date):
-    """
-    Args:
-        tenant_id(string)
-        date(datetime)
-    """
-    
-    model = joblib.load('{}-{}-M.joblib'.format(tenant_id, date.date()))
-    # TODO load from oss
-    return model 
+def save_model(tenant_id, m_or_d, model, encoder, start_year):
+    today = datetime.now().date()
+    joblib.dump(model, '{}-{}-{}.joblib'.format(tenant_id, today, m_or_d))
+    # also override the newest model
+    joblib.dump(model, '{}-{}.joblib'.format(tenant_id, m_or_d))
 
-def save_model_daily(model, tenant_id):
-    today = datetime.now().date()
-    joblib.dump(model, '{}-{}-D.joblib'.format(tenant_id, today))
     # TODO save to oss
-    
-def save_model_monthly(model, tenant_id):
-    today = datetime.now().date()
-    joblib.dump(model, '{}-{}-M.joblib'.format(tenant_id, today))
-    # TODO save to oss
+
 
 def predict_daily_sku(df):
     """
