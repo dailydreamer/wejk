@@ -1,4 +1,5 @@
 .ipynb_checkpoints/
+.vscode
 *.pyc
 __pycache__/
 set_env.sh
