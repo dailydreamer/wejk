@@ -8,7 +8,42 @@ from sklearn.multioutput import MultiOutputRegressor
 import pandas as pd
 import numpy as np
 
-## TO DO:
+
+def load_model(tenant_id, date, m_or_d):
+    """
+    Args:
+        tenant_id(string)
+        date(datetime)
+        m_or_d(string): m stands for monthly, d for daily
+    Returns:
+        model: sklearn model
+        encoder: sklearn encoder
+        start_year: start year of data for indexing
+    """
+    
+    model = joblib.load('{}-{}.model.joblib'.format(tenant_id, m_or_d))
+    encoder = joblib.load('{}-{}.encoder.joblib'.format(tenant_id, m_or_d))
+    start_year = joblib.load('{}-{}.start_year.joblib'.format(tenant_id, m_or_d))
+
+    return model, encoder, start_year
+
+def save_model(tenant_id, m_or_d, model, encoder, start_year):
+    today = datetime.now().date()
+
+    # save and override model
+    joblib.dump(model, '{}-{}-{}.model.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(model, '{}-{}.model.joblib'.format(tenant_id, m_or_d))
+
+    # save and override encoder
+    joblib.dump(encoder, '{}-{}-{}.encoder.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(encoder, '{}-{}.encoder.joblib'.format(tenant_id, m_or_d))
+
+    # save and override start_year
+    joblib.dump(start_year, '{}-{}-{}.start_year.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(start_year, '{}-{}.start_year.joblib'.format(tenant_id, m_or_d))
+
+
+## Annie TO DO:
 # /1. Delete drop columns
 # /2. Optimize encoder
 # /3. Check predict_daily_sku
@@ -172,28 +207,7 @@ def featureEng(df_dropped):
     
     
     return df_dropped
-
-def load_model(tenant_id, date, m_or_d):
-    """
-    Args:
-        tenant_id(string)
-        date(datetime)
-        m_or_d(string): m stands for monthly, d for daily
-    """
-    
-    model = joblib.load('{}-{}-{}.joblib'.format(tenant_id, date.date(), m_or_d))
-    # TODO load from oss
-    return model 
-
-def save_model(tenant_id, m_or_d, model, encoder, start_year):
-    today = datetime.now().date()
-    joblib.dump(model, '{}-{}-{}.joblib'.format(tenant_id, today, m_or_d))
-    # also override the newest model
-    joblib.dump(model, '{}-{}.joblib'.format(tenant_id, m_or_d))
-
-    # TODO save to oss
-
-
+ 
 def predict_daily_sku(df):
     """
     predict
