@@ -64,8 +64,13 @@ def api_predict_month_sku():
     input_df = pd.DataFrame(para['para_list'])
     input_df['tenant_id'] = para['tenant_id']
     df = predict_monthly_sku(input_df)
-    # TODO return json
-    return 'fake'
+
+    df = df.drop(['tenant_id'], axis = 1)
+    res = {
+        'tenant_id': para['tenant_id'],
+        'para_list': df.to_dict()
+    }
+    return jsonify(res)
 
 @bp.route('/predict_day_sku', methods=['POST'])
 def api_predict_day_sku():
@@ -79,5 +84,10 @@ def api_predict_day_sku():
     input_df = pd.DataFrame(para['para_list'])
     input_df['tenant_id'] = para['tenant_id']
     df = predict_daily_sku(input_df)
-    # TODO return json
-    return 'fake'
+    
+    df = df.drop(['tenant_id'], axis = 1)
+    res = {
+        'tenant_id': para['tenant_id'],
+        'para_list': df.to_dict()
+    }
+    return jsonify(res)
