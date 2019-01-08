@@ -11,4 +11,5 @@ dependencies:
   - gunicorn
   - pandas
   - scikit-learn
+  - cloudpickle=0.5.6
 

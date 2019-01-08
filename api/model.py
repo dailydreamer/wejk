@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from sklearn.externals import joblib
 from .db import get_records_periods, get_records
@@ -20,34 +21,36 @@ def load_model(tenant_id, date, m_or_d):
         start_year: start year of data for indexing
     """
     
-    model = joblib.load('{}-{}.model.joblib'.format(tenant_id, m_or_d))
-    encoder_store = joblib.load('{}-{}.encoder_store.joblib'.format(tenant_id, m_or_d))
-    encoder_cate = joblib.load('{}-{}.encoder_cate.joblib'.format(tenant_id, m_or_d))
-    encoder_size = joblib.load('{}-{}.encoder_size.joblib'.format(tenant_id, m_or_d))
-    encoder_color = joblib.load('{}-{}.encoder_color.joblib'.format(tenant_id, m_or_d))
-    start_year = joblib.load('{}-{}.start_year.joblib'.format(tenant_id, m_or_d))
+    model = joblib.load('model/'+'{}-{}.model.joblib'.format(tenant_id, m_or_d))
+    encoder_store = joblib.load('model/'+'{}-{}.encoder_store.joblib'.format(tenant_id, m_or_d))
+    encoder_cate = joblib.load('model/'+'{}-{}.encoder_cate.joblib'.format(tenant_id, m_or_d))
+    encoder_size = joblib.load('model/'+'{}-{}.encoder_size.joblib'.format(tenant_id, m_or_d))
+    encoder_color = joblib.load('model/'+'{}-{}.encoder_color.joblib'.format(tenant_id, m_or_d))
+    start_year = joblib.load('model/'+'{}-{}.start_year.joblib'.format(tenant_id, m_or_d))
     return model, encoder_store, encoder_cate, encoder_size, encoder_color, start_year
     
 def save_model(tenant_id, m_or_d, model, encoder_store, encoder_cate, encoder_color, encoder_size, start_year):
     today = datetime.now().date()
+    if not os.path.exists('model'):
+        os.makedirs('model')
     # save and override model
-    joblib.dump(model, '{}-{}-{}.model.joblib'.format(tenant_id, today, m_or_d))
-    joblib.dump(model, '{}-{}.model.joblib'.format(tenant_id, m_or_d))
+    joblib.dump(model, 'model/'+'{}-{}-{}.model.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(model, 'model/'+'{}-{}.model.joblib'.format(tenant_id, m_or_d))
     # save and override encoder
-    joblib.dump(encoder_store, '{}-{}-{}.encoder_store.joblib'.format(tenant_id, today, m_or_d))
-    joblib.dump(encoder_store, '{}-{}.encoder_store.joblib'.format(tenant_id, m_or_d))
+    joblib.dump(encoder_store, 'model/'+'{}-{}-{}.encoder_store.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(encoder_store, 'model/'+'{}-{}.encoder_store.joblib'.format(tenant_id, m_or_d))
     
-    joblib.dump(encoder_cate, '{}-{}-{}.encoder_cate.joblib'.format(tenant_id, today, m_or_d))
-    joblib.dump(encoder_cate, '{}-{}.encoder_cate.joblib'.format(tenant_id, m_or_d))
+    joblib.dump(encoder_cate, 'model/'+'{}-{}-{}.encoder_cate.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(encoder_cate, 'model/'+'{}-{}.encoder_cate.joblib'.format(tenant_id, m_or_d))
     
-    joblib.dump(encoder_color, '{}-{}-{}.encoder_color.joblib'.format(tenant_id, today, m_or_d))
-    joblib.dump(encoder_color, '{}-{}.encoder_color.joblib'.format(tenant_id, m_or_d))
+    joblib.dump(encoder_color, 'model/'+'{}-{}-{}.encoder_color.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(encoder_color, 'model/'+'{}-{}.encoder_color.joblib'.format(tenant_id, m_or_d))
     
-    joblib.dump(encoder_size, '{}-{}-{}.encoder_size.joblib'.format(tenant_id, today, m_or_d))
-    joblib.dump(encoder_size, '{}-{}.encoder_size.joblib'.format(tenant_id, m_or_d))
+    joblib.dump(encoder_size, 'model/'+'{}-{}-{}.encoder_size.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(encoder_size, 'model/'+'{}-{}.encoder_size.joblib'.format(tenant_id, m_or_d))
     # save and override start_year
-    joblib.dump(start_year, '{}-{}-{}.start_year.joblib'.format(tenant_id, today, m_or_d))
-    joblib.dump(start_year, '{}-{}.start_year.joblib'.format(tenant_id, m_or_d))
+    joblib.dump(start_year, 'model/'+'{}-{}-{}.start_year.joblib'.format(tenant_id, today, m_or_d))
+    joblib.dump(start_year, 'model/'+'{}-{}.start_year.joblib'.format(tenant_id, m_or_d))
 
 ## Annie TO DO:
 # /1. Delete drop columns
@@ -108,7 +111,7 @@ def train_daily(tenant_id):
     
     model_daily = regr_multirf   
     # save_model_daily(model_daily, tenant_id)
-    save_model(tenant_id, d, model_daily, le_store, le_cate, le_color, le_size, start_year)
+    save_model(tenant_id, 'd', model_daily, le_store, le_cate, le_color, le_size, start_year)
     
 def train_monthly(tenant_id):
     # 1-Load data from db
@@ -159,7 +162,7 @@ def train_monthly(tenant_id):
     
     model_monthly = regr_multirf_M   
     # save_model_monthly(model_monthly, tenant_id)
-    save_model(tenant_id, m, model_monthly, le_store, le_cate, le_color, le_size, start_year)
+    save_model(tenant_id, 'm', model_monthly, le_store, le_cate, le_color, le_size, start_year)
 
 # Data pipeline
 def dropColumns(df, thres = 2):
@@ -259,7 +262,7 @@ def predict_daily_sku(df):
     tenant_id = df['tenant_id']
     today = datetime.now().date()
     #pred_model = load_model_daily(tenant_id, today)
-    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, today, d)
+    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, today, 'd')
     
     df['store_id_index'] = le_store.transform(df['store_id'])
     df['category_index'] = le_cate.transform(df['category'])
@@ -300,7 +303,7 @@ def predict_monthly_sku(df):
 
     tenant_id = df['tenant_id']
     today = datetime.now().date()
-    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, today, m)
+    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, today, 'm')
     
     df['store_id_index'] = le_store.transform(df['store_id'])
     df['category_index'] = le_cate.transform(df['category'])

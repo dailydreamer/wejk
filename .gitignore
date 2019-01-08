@@ -3,3 +3,4 @@
 *.pyc
 __pycache__/
 set_env.sh
+model/

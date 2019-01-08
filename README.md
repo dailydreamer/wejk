@@ -86,19 +86,25 @@ git tag release-va.b.c
 
 ## Test
 
-test upload_csv
+upload csv
 
 ```sh
 python upload_csv.py -p 'path to csv'
 ```
 
-test upload_json
+upload_json
 
 ```sh
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -d @data/test_upload_json.json http://localhost:8000/api/v1/upload_json
 ```
 
-test predict_month_sku
+train
+
+```sh
+python train.py -m 'm'/'d' -t 'tenant_id'
+```
+
+predict_month_sku
 
 ```sh
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -d @data/test_predict_month_sku.json http://localhost:8000/api/v1/predict_month_sku
