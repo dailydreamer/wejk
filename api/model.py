@@ -9,11 +9,10 @@ from sklearn.multioutput import MultiOutputRegressor
 import pandas as pd
 import numpy as np
 
-def load_model(tenant_id, date, m_or_d):
+def load_model(tenant_id, m_or_d):
     """
     Args:
         tenant_id(string)
-        date(datetime)
         m_or_d(string): m stands for monthly, d for daily
     Returns:
         model: sklearn model
@@ -245,7 +244,7 @@ def featureEng(df_dropped):
     
     return df_dropped
  
-def predict_daily_sku(df):
+def predict_daily_sku(tenant_id, df):
     """
     predict
     Args:
@@ -259,10 +258,9 @@ def predict_daily_sku(df):
     #Rename
     df=df.rename(index=str, columns={"predict_year": "year", "predict_month": "month", "predict_day": "day", "predict_weekday": "weekday"})
     
-    tenant_id = df['tenant_id']
     today = datetime.now().date()
     #pred_model = load_model_daily(tenant_id, today)
-    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, today, 'd')
+    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, 'd')
     
     df['store_id_index'] = le_store.transform(df['store_id'])
     df['category_index'] = le_cate.transform(df['category'])
@@ -288,7 +286,7 @@ def predict_daily_sku(df):
     
     return df_result
     
-def predict_monthly_sku(df):
+def predict_monthly_sku(tenant_id, df):
     """
     predict
     Args:
@@ -301,9 +299,8 @@ def predict_monthly_sku(df):
     #Rename
     df=df.rename(index=str, columns={"predict_year": "year", "predict_month": "month"})
 
-    tenant_id = df['tenant_id']
     today = datetime.now().date()
-    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, today, 'm')
+    pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, 'm')
     
     df['store_id_index'] = le_store.transform(df['store_id'])
     df['category_index'] = le_cate.transform(df['category'])

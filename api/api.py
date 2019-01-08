@@ -63,7 +63,7 @@ def api_predict_month_sku():
     import pandas as pd
     input_df = pd.DataFrame(para['para_list'])
     input_df['tenant_id'] = para['tenant_id']
-    df = predict_monthly_sku(input_df)
+    df = predict_monthly_sku(para['tenant_id'], input_df)
 
     df = df.drop(['tenant_id'], axis = 1)
     res = {
@@ -83,7 +83,7 @@ def api_predict_day_sku():
     import pandas as pd
     input_df = pd.DataFrame(para['para_list'])
     input_df['tenant_id'] = para['tenant_id']
-    df = predict_daily_sku(input_df)
+    df = predict_daily_sku(para['tenant_id'], input_df)
     
     df = df.drop(['tenant_id'], axis = 1)
     res = {
