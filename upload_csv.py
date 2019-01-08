@@ -1,3 +1,4 @@
+import argparse
 import traceback
 import pandas as pd
 import numpy as np
@@ -17,6 +18,12 @@ def upload_csv(csv_file):
     print('upload success')
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Upload csv to database')
+    parser.add_argument('-p', '--path', dest='path', action='store',
+                        help='path to csv file',
+                        default='./data/test_upload_csv.csv')
+    args = parser.parse_args()
+    print('Start uploading csv: {}'.format(args.path))
     app = create_app()
     with app.app_context():
-        upload_csv('./data/test_upload_csv.csv')
+        upload_csv(args.path)
