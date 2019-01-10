@@ -68,7 +68,7 @@ def api_predict_month_sku():
     df = df.drop(['tenant_id'], axis = 1)
     res = {
         'tenant_id': para['tenant_id'],
-        'para_list': df.to_dict()
+        'para_list': df.to_dict('records')
     }
     return jsonify(res)
 
@@ -88,6 +88,6 @@ def api_predict_day_sku():
     df = df.drop(['tenant_id'], axis = 1)
     res = {
         'tenant_id': para['tenant_id'],
-        'para_list': df.to_dict()
+        'para_list': df.to_dict('records')
     }
     return jsonify(res)

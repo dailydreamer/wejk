@@ -3,15 +3,15 @@
     "para_list":
     [{
         "store_id":"B64F8AAC1EC140C3950DEB094C6128F5",
-        "predict_year":2015,
-        "predict_month":1,
+        "predict_year":2016,
+        "predict_month":3,
         "category":"女裤",
         "color":"黑色",
         "size":"40"
     },{
         "store_id":"B64F8AAC1EC140C3950DEB094C6128F5",
-        "predict_year":2015,
-        "predict_month":1,
+        "predict_year":2016,
+        "predict_month":3,
         "category":"吊带",
         "color":"紫色",
         "size":"42"

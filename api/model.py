@@ -253,11 +253,10 @@ def predict_daily_sku(tenant_id, df):
         df(dataframe): dataframe of predict result
     """
     
-    #Encode
-    df_ori_columns = df.columns
     #Rename
     df=df.rename(index=str, columns={"predict_year": "year", "predict_month": "month", "predict_day": "day", "predict_weekday": "weekday"})
-    
+    df_ori_columns = df.columns    
+
     today = datetime.now().date()
     #pred_model = load_model_daily(tenant_id, today)
     pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, 'd')
@@ -281,6 +280,7 @@ def predict_daily_sku(tenant_id, df):
     
     #decode
     df_result = df[df_ori_columns]
+    df=df.rename(index=str, columns={"year": "predict_year", "month": "predict_month", "day": "predict_day", "weekday": "predict_weekday"})
     df_result['predicted_daily_sales'] = y_predict[:,0]
     df_result['predicted_daily_revenue'] = y_predict[:,1]
     
@@ -294,10 +294,9 @@ def predict_monthly_sku(tenant_id, df):
     Returns:
         df(dataframe): dataframe of predict result
     """
-    #Encode
-    df_ori_columns = df.columns
     #Rename
     df=df.rename(index=str, columns={"predict_year": "year", "predict_month": "month"})
+    df_ori_columns = df.columns
 
     today = datetime.now().date()
     pred_model, le_store, le_cate, le_size, le_color, start_year = load_model(tenant_id, 'm')
@@ -320,8 +319,11 @@ def predict_monthly_sku(tenant_id, df):
     #pred_model = load_model_monthly(tenant_id, today)
     y_predict = np.round(pred_model.predict(X_test))
     
+    print(df_ori_columns)
+
     # Decode
     df_result = df[df_ori_columns]
+    df=df.rename(index=str, columns={"year": "predict_year", "month": "predict_month"})
     df_result['predicted_monthly_sales'] = y_predict[:,0]
     df_result['predicted_monthly_revenue'] = y_predict[:,1]
     
