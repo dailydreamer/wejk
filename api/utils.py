@@ -21,7 +21,7 @@ def read_csv(csv_file):
         raise ValueError('Error on reading csv: {}'.format(error))
     # check if all required columns in dataframe
     if not set(required_record_mapping.keys()).issubset(df.columns):
-        raise ValueError('Missing required columns: {}'.format(set(required_record_mapping.keys()) - set(df.columns))
+        raise ValueError('Missing required columns: {}'.format(set(required_record_mapping.keys()) - set(df.columns)))
     # change nan to None
     df = df.where((pd.notnull(df)), None)
     return df

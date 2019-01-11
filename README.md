@@ -72,7 +72,7 @@ run docker image
 
 ```sh
 docker run -it --rm \
-  --name ifashion \
+  --name wejk \
   -p 8000:8000 \
   -e SECRET_KEY \
   -e MYSQL_URI \
@@ -82,6 +82,17 @@ docker run -it --rm \
 tag release to trigger docker image build on Aliyun server
 ```sh
 git tag release-va.b.c
+```
+
+run test docker on Aliyun
+```sh
+docker run -it --rm \
+  --name wejk \
+  -p 8000:8000 \
+  -e SECRET_KEY \
+  -e MYSQL_URI \
+  -v $(pwd)/data:/app/data -v $(pwd)/model:/app/model \
+  registry.cn-hangzhou.aliyuncs.com/wejk/wejk:test /bin/bash 
 ```
 
 ## Test
