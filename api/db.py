@@ -24,7 +24,6 @@ class Record(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     sale_price = db.Column(db.Float, nullable=False)
     tag_price = db.Column(db.Float, nullable=False)
-    discount_price = db.Column(db.Float, nullable=False)
 
     sale_date = db.Column(db.DateTime, nullable=False, index=True)
     hit_date = db.Column(db.DateTime, nullable=False)
